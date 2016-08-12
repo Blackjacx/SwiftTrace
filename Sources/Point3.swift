@@ -1,0 +1,67 @@
+//
+//  Point3.swift
+//  SwiftTrace
+//
+//  Created by Stefan Herold on 05/08/16.
+//  Copyright © 2016 StefanHerold. All rights reserved.
+//
+
+public struct Point3: Equatable {
+    public var x: Double = 0.0
+    public var y: Double = 0.0
+    public var z: Double = 0.0
+
+    public func asVector() -> Vector3 {
+        return Vector3(dx: x, dy: y, dz: z)
+    }
+}
+
+/**
+ * Returns true if two points have the same element values.
+ */
+public func == (p1: Point3, p2: Point3) -> Bool {
+    return p1.x == p2.x && p1.y == p2.y && p1.z == p2.z
+}
+
+/**
+ * Returns a new point by moving the receiver by a positive Vector3.
+ */
+public func + (p: Point3, v: Vector3) -> Point3 {
+    return Point3(x: p.x + v.dx, y: p.y + v.dy, z: p.z + v.dz)
+}
+
+/**
+ * Moves the receiver by a positive Vector3.
+ */
+public func += ( p: inout Point3, v: Vector3) {
+    p = p + v
+}
+
+/**
+ * Returns a new Point by moving the receiver by a negative Vector3.
+ */
+public func - (p: Point3, v: Vector3) -> Point3 {
+    return Point3(x: p.x - v.dx, y: p.y - v.dy, z: p.z - v.dz)
+}
+
+/**
+ * Moves the receiver by a negative Vector3.
+ */
+public func -= (p: inout Point3, v: Vector3) {
+    p = p - v
+}
+
+/**
+ * Returns a new Vector by subtracting p1 from the receiver.
+ */
+public func - (p1: Point3, p2: Point3) -> Vector3 {
+    return Vector3(dx: p1.x - p2.x, dy: p1.y - p2.y, dz: p1.z - p2.z)
+}
+
+/**
+ * Returns a new point by adding to points.
+ */
+public func + (p1: Point3, p2: Point3) -> Point3 {
+    return Point3(x: p1.x + p2.x, y: p1.y + p2.y, z: p1.z + p2.z)
+}
+
