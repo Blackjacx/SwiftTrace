@@ -6,15 +6,40 @@
 //
 //
 
-public struct Color: Equatable {
-    public var red: Double
-    public var green: Double
-    public var blue: Double
+public struct Color: Equatable, JSONSerializable {
+    public var red: Double = 0.0
+    public var green: Double = 0.0
+    public var blue: Double = 0.0
+
+    /**
+     * Returns a gray scale color
+     */
+    public init(red: Double, green: Double, blue: Double) {
+        set(red: red, green: green, blue: blue)
+        clamp()
+    }
+
+    /**
+     * Returns a gray scale color
+     */
+    public init(gray: Double) {
+        set(gray: gray)
+        clamp()
+    }
+
+    /**
+     * Returns a color from an json object
+     */
+    public init(json: [String : AnyObject]) {
+        self.red = json["r"] as! Double
+        self.green = json["g"] as! Double
+        self.blue = json["b"] as! Double
+    }
 
     /**
      * Clamps the color components between 0 and maxValue
      */
-    public mutating func clamp(maxValue: Double) {
+    public mutating func clamp(maxValue: Double = 1.0) {
         red = min(max(0, red), maxValue)
         green = min(max(0, green), maxValue)
         blue = min(max(0, blue), maxValue)

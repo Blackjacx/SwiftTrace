@@ -13,10 +13,30 @@
 #endif
 
 
-public struct Vector3: Equatable {
+public struct Vector3: Equatable, JSONSerializable {
     public var dx: Double = 0.0
     public var dy: Double = 0.0
     public var dz: Double = 0.0
+
+    static let zero: Vector3 = Vector3(dx: 0, dy: 0, dz: 0)
+    
+    /**
+     * Returns a vector from dx, dy, dz components
+     */
+    public init(dx: Double, dy: Double, dz: Double) {
+        self.dx = dx
+        self.dy = dy
+        self.dz = dz
+    }
+
+    /**
+     * Returns a vector from a json object
+     */
+    public init(json: [String : AnyObject]) {
+        self.dx = json["dx"] as! Double
+        self.dy = json["dy"] as! Double
+        self.dz = json["dz"] as! Double
+    }
 
     /**
      * Returns the magnitude of the vector.

@@ -7,14 +7,36 @@
 //
 
 public struct Ray3: Equatable {
-    public var origin: Point3 = Point3()
-    public var direction: Vector3 = Vector3()
+    public var origin: Point3
+    public var direction: Vector3
 
-    init(p1: Point3, p2: Point3) {
-        origin = p1
-        direction = (p2 - p1).normalized()
+    /**
+     * Returns a ray from origin and direction
+     */
+    init(origin: Point3, direction: Vector3) {
+        self.origin = origin
+        self.direction = direction
     }
 
+    /**
+     * Returns a ray from p1 to p2
+     */
+    init(p1: Point3, p2: Point3) {
+        self.origin = p1
+        self.direction = (p2 - p1).normalized()
+    }
+
+    /**
+     * Returns a ray from a json object
+     */
+    public init(json: [String : AnyObject]) {
+        self.origin = Point3(json: json["origin"] as! [String:AnyObject])
+        self.direction = Vector3(json: json["direction"] as! [String:AnyObject])
+    }
+
+    /**
+     * Gives the point on the ray in the distance t from its origin
+     */
     public func at(t: Double) -> Point3 {
         return origin + direction*t
     }

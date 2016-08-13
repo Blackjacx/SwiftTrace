@@ -6,8 +6,9 @@
 //
 //
 
-protocol Object {
+public protocol Object: JSONSerializable {
     var material: Material {get set}
+
     func intersect(ray: Ray3, t: inout Double) -> Bool
     func normal(hit: Point3) -> Vector3
 }

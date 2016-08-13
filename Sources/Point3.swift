@@ -6,11 +6,34 @@
 //
 //
 
-public struct Point3: Equatable {
+public struct Point3: Equatable, JSONSerializable {
     public var x: Double = 0.0
     public var y: Double = 0.0
     public var z: Double = 0.0
 
+    static let zero: Point3 = Point3(x: 0, y: 0, z: 0)
+    
+    /**
+     * Returns a point from x, y, z components
+     */
+    public init(x: Double, y: Double, z: Double) {
+        self.x = x
+        self.y = y
+        self.z = z
+    }
+
+    /**
+     * Returns a point from a json object
+     */
+    public init(json: [String : AnyObject]) {
+        self.x = json["x"] as! Double
+        self.y = json["y"] as! Double
+        self.z = json["z"] as! Double
+    }
+
+    /**
+     * Returns the point as vector
+     */
     public func asVector() -> Vector3 {
         return Vector3(dx: x, dy: y, dz: z)
     }

@@ -11,7 +11,16 @@ public struct Sphere: Object {
     public var center: Point3
     public var radius: Double
 
-    func intersect(ray: Ray3, t: inout Double) -> Bool {
+    /**
+     * Returns a sphere from a json object
+     */
+    public init(json: [String : AnyObject]) {
+        self.material = Material(json: json["material"] as! [String:AnyObject])
+        self.center = Point3(json: json["center"] as! [String:AnyObject])
+        self.radius = json["radius"] as! Double
+    }
+
+    public func intersect(ray: Ray3, t: inout Double) -> Bool {
         /****************************************************
          * RT1.1: INTERSECTION CALCULATION
          *
@@ -38,7 +47,7 @@ public struct Sphere: Object {
         return false
     }
 
-    func normal(hit: Point3) -> Vector3 {
+    public func normal(hit: Point3) -> Vector3 {
         /****************************************************
          * RT1.2: NORMAL CALCULATION
          *
@@ -48,7 +57,7 @@ public struct Sphere: Object {
          * Insert calculation of the sphere's normal at point P here.
          ****************************************************/
         
-        let N = Vector3() /* = ... */;
+        let N = Vector3.zero
         
         return N
     }
