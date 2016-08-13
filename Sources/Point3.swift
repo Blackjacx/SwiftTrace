@@ -3,7 +3,7 @@
 //  SwiftTrace
 //
 //  Created by Stefan Herold on 05/08/16.
-//  Copyright © 2016 StefanHerold. All rights reserved.
+//
 //
 
 public struct Point3: Equatable {

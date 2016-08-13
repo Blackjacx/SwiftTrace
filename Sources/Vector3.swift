@@ -3,7 +3,7 @@
 //  SwiftTrace
 //
 //  Created by Stefan Herold on 05/08/16.
-//  Copyright © 2016 StefanHerold. All rights reserved.
+//
 //
 
 #if os(OSX) || os(iOS)
@@ -119,6 +119,9 @@ public func *= ( v1: inout Vector3, v2: Vector3) {
  */
 public func * (v: Vector3, s: Double) -> Vector3 {
     return Vector3(dx: v.dx * s, dy: v.dy * s, dz: v.dz * s)
+}
+public func * (s: Double, v: Vector3) -> Vector3 {
+    return v * s
 }
 
 /**
