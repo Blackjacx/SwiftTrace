@@ -25,10 +25,16 @@ public struct Point3: Equatable, JSONSerializable {
     /**
      * Returns a point from a json object
      */
-    public init(json: [String : AnyObject]) {
-        self.x = json["x"] as! Double
-        self.y = json["y"] as! Double
-        self.z = json["z"] as! Double
+    public init(json: [String: Any]) throws {
+        guard
+            let x = json["x"] as? Double,
+            let y = json["y"] as? Double,
+            let z = json["z"] as? Double else {
+                throw JSONError.decodingError(self.dynamicType, json)
+        }
+        self.x = x
+        self.y = y
+        self.z = z
     }
 
     /**

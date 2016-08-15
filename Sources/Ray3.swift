@@ -29,9 +29,14 @@ public struct Ray3: Equatable {
     /**
      * Returns a ray from a json object
      */
-    public init(json: [String : AnyObject]) {
-        self.origin = Point3(json: json["origin"] as! [String:AnyObject])
-        self.direction = Vector3(json: json["direction"] as! [String:AnyObject])
+    public init(json: [String: Any]) throws {
+        guard
+            let origin = json["origin"] as? [String: Any],
+            let direction = json["direction"] as? [String: Any] else {
+                throw JSONError.decodingError(self.dynamicType, json)
+        }
+        self.origin = try Point3(json: origin)
+        self.direction = try Vector3(json: direction)
     }
 
     /**

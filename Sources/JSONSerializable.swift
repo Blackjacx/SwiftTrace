@@ -6,6 +6,10 @@
 //
 //
 
+enum JSONError: Error {
+    case decodingError(Any, [String: Any])
+}
+
 public protocol JSONSerializable {
-    init(json: [String:AnyObject])
+    init(json: [String: Any]) throws
 }

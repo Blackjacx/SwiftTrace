@@ -10,8 +10,8 @@ class Raytracer {
     var scene: Scene
 
     public init(filePath: String) throws {
-        let json: [String:AnyObject] = [:]
-        scene = Scene(json: json)
+        let json: [String: Any] = [:]
+        scene = try Scene(json: json)
     }
 
     /**

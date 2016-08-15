@@ -7,7 +7,7 @@
 //
 
 #if os(OSX) || os(iOS)
-    import Darwin
+    import Darwin.C
 #elseif os(Linux)
     import Glibc
 #endif
@@ -32,10 +32,16 @@ public struct Vector3: Equatable, JSONSerializable {
     /**
      * Returns a vector from a json object
      */
-    public init(json: [String : AnyObject]) {
-        self.dx = json["dx"] as! Double
-        self.dy = json["dy"] as! Double
-        self.dz = json["dz"] as! Double
+    public init(json: [String: Any]) throws {
+        guard
+            let dx = json["dx"] as? Double,
+            let dy = json["dy"] as? Double,
+            let dz = json["dz"] as? Double else {
+                throw JSONError.decodingError(self.dynamicType, json)
+        }
+        self.dx = dx
+        self.dy = dy
+        self.dz = dz
     }
 
     /**

@@ -14,10 +14,16 @@ public struct Sphere: Object {
     /**
      * Returns a sphere from a json object
      */
-    public init(json: [String : AnyObject]) {
-        self.material = Material(json: json["material"] as! [String:AnyObject])
-        self.center = Point3(json: json["center"] as! [String:AnyObject])
-        self.radius = json["radius"] as! Double
+    public init(json: [String: Any]) throws {
+        guard
+            let material = json["material"] as? [String: Any],
+            let center = json["center"] as? [String: Any],
+            let radius = json["radius"] as? Double else {
+                throw JSONError.decodingError(self.dynamicType, json)
+        }
+        self.material = try Material(json: material)
+        self.center = try Point3(json: center)
+        self.radius = radius
     }
 
     public func intersect(ray: Ray3, t: inout Double) -> Bool {

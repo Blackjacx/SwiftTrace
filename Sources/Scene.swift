@@ -14,20 +14,24 @@ public struct Scene: JSONSerializable {
     /**
      * Returns a Scene from a json object
      */
-    public init(json: [String : AnyObject]) {
-        let camera = json["camera"] as! [String:AnyObject]
-        let lights = json["lights"] as! [[String:AnyObject]]
-        let objects = json["objects"] as! [[String:AnyObject]]
+    public init(json: [String: Any]) throws {
+        guard
+            let camera = json["camera"] as? [String: Any],
+            let eye = camera["center"] as? [String: Any],
+            let lights = json["lights"] as? [[String: Any]],
+            let objects = json["objects"] as? [[String: Any]] else {
+                throw JSONError.decodingError(self.dynamicType, json)
+        }
         for lightDict in lights {
-            self.lights.append(Light(json: lightDict))
+            self.lights.append(try Light(json: lightDict))
         }
         for objectDict in objects {
             let type = objectDict["type"] as! String
             if type == "sphere" {
-                self.objects.append(Sphere(json: objectDict))
+                self.objects.append(try Sphere(json: objectDict))
             }
         }
-        self.eye = Point3(json: camera["eye"] as! [String:AnyObject])
+        self.eye = try Point3(json: eye)
     }
 
     public mutating func addObject(obj: Object) {

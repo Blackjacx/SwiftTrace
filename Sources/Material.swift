@@ -16,12 +16,20 @@ public struct Material: JSONSerializable {
     /**
      * Returns a material from a json object
      */
-    public init(json: [String : AnyObject]) {
-        self.color = Color(json: json["color"] as! [String:AnyObject])
-        self.ambient = json["ambient"] as! Double
-        self.diffuse = json["diffuse"] as! Double
-        self.specular = json["specular"] as! Double
-        self.phong = json["phong"] as! Double
+    public init(json: [String: Any]) throws {
+        guard
+            let color = json["color"] as? [String: Any],
+            let ambient = json["ambient"] as? Double,
+            let diffuse = json["diffuse"] as? Double,
+            let specular = json["specular"] as? Double,
+            let phong = json["phong"] as? Double else {
+                throw JSONError.decodingError(self.dynamicType, json)
+        }
+        self.color = try Color(json: color)
+        self.ambient = ambient
+        self.diffuse = diffuse
+        self.specular = specular
+        self.phong = phong
     }
 
     /**
