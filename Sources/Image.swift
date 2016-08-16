@@ -16,6 +16,6 @@ public class Image {
     }
 
     public func setColor(color: Color, x: UInt, y: UInt) {
-        
+//        print("x: \(x), y: \(y), color: \(color)")
     }
 }

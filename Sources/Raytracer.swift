@@ -6,19 +6,66 @@
 //
 //
 
+import Foundation
+
 class Raytracer {
-    var scene: Scene
+    private var scene: Scene
 
     public init(filePath: String) throws {
-        let json: [String: Any] = [:]
+        guard let fileData = FileManager.default.contents(atPath: filePath) else {
+            throw FileError.fileNotFound(filePath)
+        }
+        let json = try JSONSerialization.jsonObject(with: fileData, options: []) as! [String:AnyObject]
         scene = try Scene(json: json)
     }
 
     /**
      * Calculates the color for an infividual ray.
      */
-    public func trace(ray: Ray3) -> Color {
-        return Color(gray: 1.0)
+    private func trace(ray: Ray3) -> Color {
+        var t: Double = 0.0
+        var min_t: Double = 0.0
+        var object: Object?
+
+        // Find hit object and distance
+        for obj in scene.objects {
+            if obj.intersect(ray: ray, t: &t) && (object == nil || t < min_t) {
+                min_t = t
+                object = obj
+            }
+        }
+
+        guard let hitObject = object else {
+            return Color(red: 0, green: 0, blue: 0)
+        }
+
+        let material = hitObject.material           //the hit objects material
+        let hit = ray.at(t: min_t)                  //the hit point
+        let N = hitObject.normal(hit: hit)          //the normal
+        let V = -ray.direction                      //the view vector
+
+
+        /****************************************************
+         * RT1.3: LIGHTING CALCULATION
+         *
+         * Insert calculation of color here (PHONG model).
+         *
+         * Given: material, hit, N, V, lights[]
+         * Sought: color
+         *
+         * Hints: (see vector.h)
+         *        Vector*Vector      dot product
+         *        Vector+Vector      vector sum
+         *        Vector-Vector      vector difference
+         *        Point-Point        yields vector
+         *        Vector.normalize() normalizes vector, returns length
+         *        float*Color        scales each color component (r,g,b)
+         *        Color*Color        dito
+         *        pow(a,b)           a to the power of b
+         ****************************************************/
+
+        let color = material.color                  // place holder
+        return color
     }
 
     /**

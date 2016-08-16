@@ -30,7 +30,7 @@ public struct Color: Equatable, JSONSerializable {
     /**
      * Returns a color from an json object
      */
-    public init(json: [String: Any]) throws {
+    public init(json: [String: AnyObject]) throws {
         guard
             let red = json["r"] as? Double,
             let green = json["g"] as? Double,

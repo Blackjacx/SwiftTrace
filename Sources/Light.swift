@@ -13,13 +13,21 @@ public struct Light: JSONSerializable {
     /**
      * Returns a light from a json object
      */
-    public init(json: [String: Any]) throws {
+    public init(json: [String: AnyObject]) throws {
         guard
-            let color = json["color"] as? [String: Any],
-            let center = json["center"] as? [String: Any] else {
+            let color = json["color"] as? [String: AnyObject],
+            let center = json["center"] as? [String: AnyObject] else {
                 throw JSONError.decodingError(self.dynamicType, json)
         }
         self.color = try Color(json: color)
         self.center = try Point3(json: center)
+    }
+
+    /**
+     * Returns a light from its components
+     */
+    public init(center: Point3, color: Color) {
+        self.color = color
+        self.center = center
     }
 }

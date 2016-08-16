@@ -32,7 +32,7 @@ public struct Vector3: Equatable, JSONSerializable {
     /**
      * Returns a vector from a json object
      */
-    public init(json: [String: Any]) throws {
+    public init(json: [String: AnyObject]) throws {
         guard
             let dx = json["dx"] as? Double,
             let dy = json["dy"] as? Double,
@@ -116,6 +116,13 @@ public func += ( v1: inout Vector3, v2: Vector3) {
  */
 public func - (v1: Vector3, v2: Vector3) -> Vector3 {
     return Vector3(dx: v1.dx - v2.dx, dy: v1.dy - v2.dy, dz: v1.dz - v2.dz)
+}
+
+/**
+ * Returns the negative version of the input vector
+ */
+public prefix func - (v: Vector3) -> Vector3 {
+    return Vector3(dx: -v.dx, dy: -v.dy, dz: -v.dz)
 }
 
 /**

@@ -7,9 +7,13 @@
 //
 
 enum JSONError: Error {
-    case decodingError(Any, [String: Any])
+    case decodingError(Any, [String: AnyObject])
+}
+
+enum FileError: Error {
+    case fileNotFound(String)
 }
 
 public protocol JSONSerializable {
-    init(json: [String: Any]) throws
+    init(json: [String: AnyObject]) throws
 }

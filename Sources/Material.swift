@@ -16,9 +16,9 @@ public struct Material: JSONSerializable {
     /**
      * Returns a material from a json object
      */
-    public init(json: [String: Any]) throws {
+    public init(json: [String: AnyObject]) throws {
         guard
-            let color = json["color"] as? [String: Any],
+            let color = json["color"] as? [String: AnyObject],
             let ambient = json["ambient"] as? Double,
             let diffuse = json["diffuse"] as? Double,
             let specular = json["specular"] as? Double,

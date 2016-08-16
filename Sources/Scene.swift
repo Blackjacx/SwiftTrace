@@ -9,17 +9,17 @@
 public struct Scene: JSONSerializable {
     private(set) var eye: Point3
     private(set) var lights: [Light] = []
-    private var objects: [Object] = []
+    private(set) var objects: [Object] = []
 
     /**
      * Returns a Scene from a json object
      */
-    public init(json: [String: Any]) throws {
+    public init(json: [String: AnyObject]) throws {
         guard
-            let camera = json["camera"] as? [String: Any],
-            let eye = camera["center"] as? [String: Any],
-            let lights = json["lights"] as? [[String: Any]],
-            let objects = json["objects"] as? [[String: Any]] else {
+            let camera = json["camera"] as? [String: AnyObject],
+            let eye = camera["center"] as? [String: AnyObject],
+            let lights = json["lights"] as? [[String: AnyObject]],
+            let objects = json["objects"] as? [[String: AnyObject]] else {
                 throw JSONError.decodingError(self.dynamicType, json)
         }
         for lightDict in lights {
@@ -34,27 +34,12 @@ public struct Scene: JSONSerializable {
         self.eye = try Point3(json: eye)
     }
 
-    public mutating func addObject(obj: Object) {
-        objects.append(obj)
-    }
-
-    public func object(at index: Int) -> Object {
-        return objects[index]
-    }
-
-    public func objectCount() -> Int {
-        return objects.count
-    }
-
-    public mutating func addLight(light: Light) {
-        lights.append(light)
-    }
-
-    public func light(at index: Int) -> Light {
-        return lights[index]
-    }
-
-    public func lightCount() -> Int {
-        return lights.count
+    /**
+     * Returns a Scene from its comoponents
+     */
+    public init(eye: Point3, lights: [Light], objects: [Object]) {
+        self.eye = eye
+        self.objects = objects
+        self.lights = lights
     }
 }

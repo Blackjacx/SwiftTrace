@@ -25,7 +25,7 @@ public struct Point3: Equatable, JSONSerializable {
     /**
      * Returns a point from a json object
      */
-    public init(json: [String: Any]) throws {
+    public init(json: [String: AnyObject]) throws {
         guard
             let x = json["x"] as? Double,
             let y = json["y"] as? Double,

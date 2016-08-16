@@ -14,15 +14,25 @@ public struct Sphere: Object {
     /**
      * Returns a sphere from a json object
      */
-    public init(json: [String: Any]) throws {
+    public init(json: [String: AnyObject]) throws {
         guard
-            let material = json["material"] as? [String: Any],
-            let center = json["center"] as? [String: Any],
+            let material = json["material"] as? [String: AnyObject],
+            let center = json["center"] as? [String: AnyObject],
             let radius = json["radius"] as? Double else {
                 throw JSONError.decodingError(self.dynamicType, json)
         }
         self.material = try Material(json: material)
         self.center = try Point3(json: center)
+        self.radius = radius
+    }
+
+
+    /**
+     * Returns a sphere from its components
+     */
+    public init(center: Point3, radius: Double, material: Material) {
+        self.material = material
+        self.center = center
         self.radius = radius
     }
 
