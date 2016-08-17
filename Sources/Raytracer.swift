@@ -36,7 +36,7 @@ class Raytracer {
         }
 
         guard let hitObject = object else {
-            return Color(red: 0, green: 0, blue: 0)
+            return Color(gray: 0)
         }
 
         let material = hitObject.material           //the hit objects material
@@ -81,7 +81,7 @@ class Raytracer {
                 let ray = Ray3(p1: scene.eye, p2: pixel)
                 var color = trace(ray: ray)
                 color.clamp()
-                image.setColor(color: color, x: x, y: y)
+                image[x, y] = color
             }
         }
     }

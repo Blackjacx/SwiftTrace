@@ -6,15 +6,28 @@
 //
 //
 
-public class Image {
-    private(set)var pixel: [Color] = []
+import Foundation
+
+enum FileIOError: Error {
+    case writeError(String)
+}
+
+public class Image: CustomStringConvertible {
+    private(set)var pixel: [Color]
     private(set) var width: UInt
     private(set) var height: UInt
     var size: UInt { return width * height }
+    var backgroundColor: Color = Color(gray: 0)
+
+    // Custom String Convertible
+    public var description: String {
+        return pixel.description
+    }
 
     init(width: UInt, height: UInt) {
         self.width = width
         self.height = height
+        self.pixel = Array(repeating: backgroundColor, count: Int(width*height))
     }
 
     /// Normalized accessors for bumpmapping. Uses green component. Returns dx and dy.
@@ -79,7 +92,34 @@ public class Image {
 
     // MARK: - I/O
 
-    func write() {
+    func write(to filepath: String) throws {
+        guard let out = NSOutputStream(toFileAtPath: filepath, append: false) else {
+            throw FileIOError.writeError(filepath)
+        }
 
+        let writer = { (text: String, os: NSOutputStream)->() in
+            text.nulTerminatedUTF8.withUnsafeBufferPointer { p -> Void in
+                let buffer:UnsafePointer<UInt8> = UnsafePointer<UInt8>(p.baseAddress!)
+                let bufferSize = text.lengthOfBytes(using: String.Encoding.utf8)
+                out.write(buffer, maxLength: bufferSize)
+            }
+        }
+
+        out.open()
+        let header = "P3 \(width) \(height) \(255)\n"
+        writer(header, out)
+
+        var row: UInt = 0
+        for index: Int in 0..<Int(size) {
+            let c = pixel[index] * 255
+            var message = "\(Int(c.red)) \(Int(c.green)) \(Int(c.blue))"
+            if row != 0 {
+                message = ((row % 10) == 0 ? "\n" : "   ") + message
+            }
+            row += 1
+            writer(message, out)
+        }
+        writer(header, out)
+        out.close()
     }
 }

@@ -73,7 +73,7 @@ public struct Sphere: Object {
          * Insert calculation of the sphere's normal at point P here.
          ****************************************************/
         
-        let N = Vector3.zero
+        let N = (hit-center) / radius
         
         return N
     }

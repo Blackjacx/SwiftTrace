@@ -6,11 +6,7 @@
 //
 //
 
-#if os(OSX) || os(iOS)
-    import Darwin.C
-#elseif os(Linux)
-    import Glibc
-#endif
+import Foundation
 
 
 public struct Vector3: Equatable, JSONSerializable {

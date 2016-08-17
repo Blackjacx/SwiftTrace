@@ -6,17 +6,20 @@
 //
 //
 
-public struct Color: Equatable, JSONSerializable {
+public struct Color: Equatable, JSONSerializable, CustomStringConvertible {
     public var red: Double = 0.0
     public var green: Double = 0.0
     public var blue: Double = 0.0
+
+    public var description: String {
+        return "\(red) \(green) \(blue)"
+    }
 
     /**
      * Returns a gray scale color
      */
     public init(red: Double, green: Double, blue: Double) {
         set(red: red, green: green, blue: blue)
-        clamp()
     }
 
     /**
@@ -24,7 +27,6 @@ public struct Color: Equatable, JSONSerializable {
      */
     public init(gray: Double) {
         set(gray: gray)
-        clamp()
     }
 
     /**
