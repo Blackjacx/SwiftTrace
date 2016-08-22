@@ -40,14 +40,6 @@ public struct Sphere: Object {
     }
 
     public func intersect(ray: Ray3, t: inout Double) -> Bool {
-//        let OC = (C - ray.origin).normalized()
-//        if OC.dot(v: ray.direction) > 0.999 {
-//            t = 1000
-//            return true
-//        }
-//        return false
-//
-
         let CO = ray.origin - C                 // vector from center to origin
         let p = 2.0 * CO.dot(v: ray.direction)  // part I for quadratic equation
         let q = CO.dot(v: CO) - r*r             // part II for quadratic equation
@@ -74,20 +66,8 @@ public struct Sphere: Object {
         return false
     }
     
-    public func
-
-        normal(P: Point3) -> Vector3 {
-        /****************************************************
-         * RT1.2: NORMAL CALCULATION
-         *
-         * Given: P, C, r
-         * Sought: N
-         *
-         * Insert calculation of the sphere's normal at point P here.
-         ****************************************************/
-        
+    public func normal(P: Point3) -> Vector3 {
         let N = (P-C) / r
-        
         return N
     }
 }

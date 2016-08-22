@@ -16,9 +16,10 @@ let filePath = CommandLine.arguments[1]
 var image = Image(width: 400, height: 400)
 
 do {
+    let destinationName = filePath.components(separatedBy: "/").last?.components(separatedBy: ".").first ?? "test"
     let raytracer = try Raytracer(filePath: filePath)
     raytracer.trace(image: image)
-    try image.write(to: "test.ppm")
+    try image.write(to: destinationName + ".ppm")
 } catch JSONError.decodingError(let className, let json) {
     print("Failed initializing scene: \(className) - \(json)")
 } catch FileIOError.writeError(let filePath) {
