@@ -23,3 +23,15 @@ As prerequisite you'll need the newest Swift toolchain. You can find it [here](h
 ### Linux (**OPEN**)
 
 In near future it will be possible to build the project using a makefile under Linux.
+
+## Lecture Exercises
+
+This part is intended when you like to use this repository as a learning resource how to write your own ray tracing programm. Just go through the lectures step by step. You can find the solution for each lecture in the corresponding branches of this repository. They are labelled with the same numbers.
+
+### 01 - Getting familiar with the project structure and Swift
+
+### 02 - Sphere intersection calculation and Phong illumination model
+
+### 03 -
+
+### 04 -
