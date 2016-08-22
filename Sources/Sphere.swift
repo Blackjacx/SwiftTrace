@@ -6,6 +6,9 @@
 //
 //
 
+import Foundation
+
+
 public struct Sphere: Object {
     public var material: Material
     public var C: Point3
@@ -37,33 +40,43 @@ public struct Sphere: Object {
     }
 
     public func intersect(ray: Ray3, t: inout Double) -> Bool {
-        /****************************************************
-         * RT1.1: INTERSECTION CALCULATION
-         *
-         * Given: ray, C, r
-         * Sought: intersects? if true: *t
-         *
-         * Insert calculation of ray/sphere intersection here.
-         *
-         * You have the sphere's center (C) and radius (r) as well as
-         * the ray's origin (ray.O) and direction (ray.D).
-         *
-         * If the ray does not intersect the sphere, return false.
-         * Otherwise, return true and place the distance of the
-         * intersection point from the ray origin in *t (see example).
-         ****************************************************/
+//        let OC = (C - ray.origin).normalized()
+//        if OC.dot(v: ray.direction) > 0.999 {
+//            t = 1000
+//            return true
+//        }
+//        return false
+//
 
-        // place holder for actual intersection calculation
+        let CO = ray.origin - C                 // vector from center to origin
+        let p = 2.0 * CO.dot(v: ray.direction)  // part I for quadratic equation
+        let q = CO.dot(v: CO) - r*r             // part II for quadratic equation
+        let D = pow(p*0.5, 2.0) - q             // discriminant
 
-        let OC = (C - ray.origin).normalized()
-        if OC.dot(v: ray.direction) > 0.999 {
-            t = 1000
+        if D < 0.0 {
+            return false                        // 0 solutions
+        }
+
+        // distance calculation
+        let t1 = (-p * 0.5) - sqrt(D)
+
+        if t1 > DBL_EPSILON {                   // surely outside sphere (smallest ISP lies in ray direction)
+            t = t1
             return true
         }
+
+        let t2 = (-p*0.5) + sqrt(D)
+
+        if t2 > DBL_EPSILON {                   // surely inside sphere (second ISP lies in ray direction AND first ISP lies against ray direction)
+            t = t2
+            return true
+        }  
         return false
     }
+    
+    public func
 
-    public func normal(P: Point3) -> Vector3 {
+        normal(P: Point3) -> Vector3 {
         /****************************************************
          * RT1.2: NORMAL CALCULATION
          *

@@ -105,6 +105,13 @@ public func + (v1: Vector3, v2: Vector3) -> Vector3 {
 }
 
 /**
+ * Decrements a Vector3 with the value of another.
+ */
+public func - ( v1: Vector3, v2: Vector3) -> Vector3 {
+    return Vector3(dx: v1.dx - v2.dx, dy: v1.dy - v2.dy, dz: v1.dz - v2.dz)
+}
+
+/**
  * Increments a Vector3 with the value of another.
  */
 public func += ( v1: inout Vector3, v2: Vector3) {
@@ -114,8 +121,8 @@ public func += ( v1: inout Vector3, v2: Vector3) {
 /**
  * Subtracts two Vector3 values and returns the result as a new Vector3.
  */
-public func - (v1: Vector3, v2: Vector3) -> Vector3 {
-    return Vector3(dx: v1.dx - v2.dx, dy: v1.dy - v2.dy, dz: v1.dz - v2.dz)
+public func - (v1: Vector3, s: Double) -> Vector3 {
+    return Vector3(dx: v1.dx - s, dy: v1.dy - s, dz: v1.dz - s)
 }
 
 /**
