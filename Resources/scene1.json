@@ -1,0 +1,125 @@
+{
+  "camera": {
+    "center": {
+      "x": -200.0,
+      "y": 200.0,
+      "z": 1000.0
+    }
+  },
+  "lights": [
+    {
+      "center": {
+        "x": -200.0,
+        "y": 600.0,
+        "z": 1500.0
+      },
+      "color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0
+      }
+    }
+  ],
+  "objects": [
+    {
+      "type": "sphere",
+      "center": {
+        "x": 200.0,
+        "y": 200.0,
+        "z": 0.0
+      },
+      "radius": 50.0,
+      "material": {
+        "color": {
+          "r": 1.0,
+          "g": 1.0,
+          "b": 0.0
+        },
+        "ambient": 0.2,
+        "diffuse": 0.8,
+        "specular": 0.5,
+        "phong": 32.0
+      }
+    },
+    {
+      "type": "sphere",
+      "center": {
+        "x": 290.0,
+        "y": 300.0,
+        "z": 0.0
+      },
+      "radius": 30.0,
+      "material": {
+        "color": {
+          "r": 1.0,
+          "g": 0.0,
+          "b": 1.0
+        },
+        "ambient": 0.2,
+        "diffuse": 0.8,
+        "specular": 0.5,
+        "phong": 32.0
+      }
+    },
+    {
+      "type": "sphere",
+      "center": {
+        "x": 190.0,
+        "y": 100.0,
+        "z": 0.0
+      },
+      "radius": 10.0,
+      "material": {
+        "color": {
+          "r": 0.0,
+          "g": 1.0,
+          "b": 1.0
+        },
+        "ambient": 0.2,
+        "diffuse": 0.8,
+        "specular": 0.5,
+        "phong": 32.0
+      }
+    },
+    {
+      "type": "sphere",
+      "center": {
+        "x": 30.0,
+        "y": 300.0,
+        "z": 0.0
+      },
+      "radius": 70.0,
+      "material": {
+        "color": {
+          "r": 1.0,
+          "g": 0.0,
+          "b": 0.0
+        },
+        "ambient": 0.2,
+        "diffuse": 0.8,
+        "specular": 0.5,
+        "phong": 32.0
+      }
+    },
+    {
+      "type": "sphere",
+      "center": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "radius": 5.0,
+      "material": {
+        "color": {
+          "r": 1.0,
+          "g": 1.0,
+          "b": 1.0
+        },
+        "ambient": 0.2,
+        "diffuse": 0.8,
+        "specular": 0.5,
+        "phong": 32.0
+      }
+    }
+  ]
+}

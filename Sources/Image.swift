@@ -93,16 +93,15 @@ public class Image: CustomStringConvertible {
     // MARK: - I/O
 
     func write(to filepath: String) throws {
-        guard let out = NSOutputStream(toFileAtPath: filepath, append: false) else {
+        guard let out = OutputStream(toFileAtPath: filepath, append: false) else {
             throw FileIOError.writeError(filepath)
         }
 
-        let writer = { (text: String, os: NSOutputStream)->() in
-            text.nulTerminatedUTF8.withUnsafeBufferPointer { p -> Void in
-                let buffer:UnsafePointer<UInt8> = UnsafePointer<UInt8>(p.baseAddress!)
-                let bufferSize = text.lengthOfBytes(using: String.Encoding.utf8)
-                out.write(buffer, maxLength: bufferSize)
+        let writer = { (text: String, os: OutputStream)->() in
+            guard let data = text.data(using: .utf8) else {
+                return
             }
+            _ = data.withUnsafeBytes { os.write($0, maxLength: data.count) }
         }
 
         out.open()

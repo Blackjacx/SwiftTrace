@@ -17,7 +17,7 @@ public struct Light: JSONSerializable {
         guard
             let color = json["color"] as? [String: AnyObject],
             let center = json["center"] as? [String: AnyObject] else {
-                throw JSONError.decodingError(self.dynamicType, json)
+                throw JSONError.decodingError(type(of: self), json)
         }
         self.color = try Color(json: color)
         self.center = try Point3(json: center)

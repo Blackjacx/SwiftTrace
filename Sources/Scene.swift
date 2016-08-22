@@ -20,7 +20,7 @@ public struct Scene: JSONSerializable {
             let eye = camera["center"] as? [String: AnyObject],
             let lights = json["lights"] as? [[String: AnyObject]],
             let objects = json["objects"] as? [[String: AnyObject]] else {
-                throw JSONError.decodingError(self.dynamicType, json)
+                throw JSONError.decodingError(type(of: self), json)
         }
         for lightDict in lights {
             self.lights.append(try Light(json: lightDict))

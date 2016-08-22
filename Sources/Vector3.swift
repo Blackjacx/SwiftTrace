@@ -9,7 +9,7 @@
 import Foundation
 
 
-public struct Vector3: Equatable, JSONSerializable {
+public struct Vector3: Equatable, JSONSerializable, CustomStringConvertible {
     public var dx: Double = 0.0
     public var dy: Double = 0.0
     public var dz: Double = 0.0
@@ -33,18 +33,22 @@ public struct Vector3: Equatable, JSONSerializable {
             let dx = json["dx"] as? Double,
             let dy = json["dy"] as? Double,
             let dz = json["dz"] as? Double else {
-                throw JSONError.decodingError(self.dynamicType, json)
+                throw JSONError.decodingError(type(of: self), json)
         }
         self.dx = dx
         self.dy = dy
         self.dz = dz
     }
 
+    public var description: String {
+        return "\(dx), \(dy), \(dz)"
+    }
+
     /**
      * Returns the magnitude of the vector.
      */
     public func length() -> Double {
-        return sqrt(pow(dx, dx) + pow(dy, dy) + pow(dz, dz))
+        return sqrt(pow(dx, 2.0) + pow(dy, 2.0) + pow(dz, 2.0))
     }
 
     /**

@@ -37,7 +37,7 @@ public struct Color: Equatable, JSONSerializable, CustomStringConvertible {
             let red = json["r"] as? Double,
             let green = json["g"] as? Double,
             let blue = json["b"] as? Double else {
-                throw JSONError.decodingError(self.dynamicType, json)
+                throw JSONError.decodingError(type(of: self), json)
         }
         self.red = red
         self.green = green

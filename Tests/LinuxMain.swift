@@ -1,5 +1,5 @@
 import XCTest
-@testable import SwiftTraceTestSuite
+@testable import SwiftTraceTests
 
 XCTMain([
      testCase(SwiftTraceTests.allTests),

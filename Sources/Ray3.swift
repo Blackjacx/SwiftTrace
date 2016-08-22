@@ -33,7 +33,7 @@ public struct Ray3: Equatable {
         guard
             let origin = json["origin"] as? [String: AnyObject],
             let direction = json["direction"] as? [String: AnyObject] else {
-                throw JSONError.decodingError(self.dynamicType, json)
+                throw JSONError.decodingError(type(of: self), json)
         }
         self.origin = try Point3(json: origin)
         self.direction = try Vector3(json: direction)

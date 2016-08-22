@@ -1,8 +1,19 @@
+import Foundation
+
 print("Welcome to SwiftTrace - The cross platform ray tracer!")
 
+func usage() {
+    print("Usage: swifttrace <filename.json>")
+}
 
+if CommandLine.argc != 2 {
+    print("No file path provided!")
+    usage()
+    exit(0)
+}
+
+let filePath = CommandLine.arguments[1]
 var image = Image(width: 400, height: 400)
-let filePath = Process.arguments.last!
 
 do {
     let raytracer = try Raytracer(filePath: filePath)

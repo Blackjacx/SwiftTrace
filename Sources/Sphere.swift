@@ -8,8 +8,8 @@
 
 public struct Sphere: Object {
     public var material: Material
-    public var center: Point3
-    public var radius: Double
+    public var C: Point3
+    public var r: Double
 
     /**
      * Returns a sphere from a json object
@@ -19,11 +19,11 @@ public struct Sphere: Object {
             let material = json["material"] as? [String: AnyObject],
             let center = json["center"] as? [String: AnyObject],
             let radius = json["radius"] as? Double else {
-                throw JSONError.decodingError(self.dynamicType, json)
+                throw JSONError.decodingError(type(of: self), json)
         }
         self.material = try Material(json: material)
-        self.center = try Point3(json: center)
-        self.radius = radius
+        self.C = try Point3(json: center)
+        self.r = radius
     }
 
 
@@ -32,8 +32,8 @@ public struct Sphere: Object {
      */
     public init(center: Point3, radius: Double, material: Material) {
         self.material = material
-        self.center = center
-        self.radius = radius
+        self.C = center
+        self.r = radius
     }
 
     public func intersect(ray: Ray3, t: inout Double) -> Bool {
@@ -55,7 +55,7 @@ public struct Sphere: Object {
 
         // place holder for actual intersection calculation
 
-        let OC = (center - ray.origin).normalized()
+        let OC = (C - ray.origin).normalized()
         if OC.dot(v: ray.direction) > 0.999 {
             t = 1000
             return true
@@ -63,7 +63,7 @@ public struct Sphere: Object {
         return false
     }
 
-    public func normal(hit: Point3) -> Vector3 {
+    public func normal(P: Point3) -> Vector3 {
         /****************************************************
          * RT1.2: NORMAL CALCULATION
          *
@@ -73,7 +73,7 @@ public struct Sphere: Object {
          * Insert calculation of the sphere's normal at point P here.
          ****************************************************/
         
-        let N = (hit-center) / radius
+        let N = (P-C) / r
         
         return N
     }

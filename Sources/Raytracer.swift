@@ -41,7 +41,7 @@ class Raytracer {
 
         let material = hitObject.material           //the hit objects material
         let hit = ray.at(t: min_t)                  //the hit point
-        let N = hitObject.normal(hit: hit)          //the normal
+        let N = hitObject.normal(P: hit)            //the normal
         let V = -ray.direction                      //the view vector
 
 

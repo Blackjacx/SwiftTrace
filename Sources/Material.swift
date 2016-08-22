@@ -23,7 +23,7 @@ public struct Material: JSONSerializable {
             let diffuse = json["diffuse"] as? Double,
             let specular = json["specular"] as? Double,
             let phong = json["phong"] as? Double else {
-                throw JSONError.decodingError(self.dynamicType, json)
+                throw JSONError.decodingError(type(of: self), json)
         }
         self.color = try Color(json: color)
         self.ambient = ambient

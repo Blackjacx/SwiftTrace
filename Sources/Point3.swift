@@ -6,7 +6,7 @@
 //
 //
 
-public struct Point3: Equatable, JSONSerializable {
+public struct Point3: Equatable, JSONSerializable, CustomStringConvertible {
     public var x: Double = 0.0
     public var y: Double = 0.0
     public var z: Double = 0.0
@@ -30,11 +30,15 @@ public struct Point3: Equatable, JSONSerializable {
             let x = json["x"] as? Double,
             let y = json["y"] as? Double,
             let z = json["z"] as? Double else {
-                throw JSONError.decodingError(self.dynamicType, json)
+                throw JSONError.decodingError(type(of: self), json)
         }
         self.x = x
         self.y = y
         self.z = z
+    }
+
+    public var description: String {
+        return "(\(x), \(y), \(z))"
     }
 
     /**
