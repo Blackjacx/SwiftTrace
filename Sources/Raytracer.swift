@@ -8,8 +8,16 @@
 
 import Foundation
 
+struct Constants {
+    static let RAD_2_GRAD: Double = 57.295779513082320876798154814105
+    static let GRAD_2_RAD: Double = 0.017453292519943295769236907684886
+}
+
 class Raytracer {
     private var scene: Scene
+    private var glassnerH: Vector3
+    private var glassnerV: Vector3
+    private var glassnerMidPoint: Point3
 
     public init(filePath: String) throws {
         guard let fileData = FileManager.default.contents(atPath: filePath) else {
@@ -17,12 +25,24 @@ class Raytracer {
         }
         let json = try JSONSerialization.jsonObject(with: fileData, options: []) as! [String:AnyObject]
         scene = try Scene(json: json)
+
+        /*
+         * Setup Glassner's Simple Viewing Geometry (https://graphics.stanford.edu/courses/cs348b-98/gg/viewgeom.html)
+         */
+        let aspect = 1.0 * Double(scene.width) / Double(self.scene.height)
+        let A = scene.gaze.cross(v: scene.up)
+        let B = A.cross(v: scene.gaze)
+        let phi = scene.phi * 0.5 * Constants.GRAD_2_RAD
+        let theta = atan( tan(phi) / aspect)
+        glassnerH = A.normalized() * scene.gaze.length() * tan(phi)
+        glassnerV = B.normalized() * scene.gaze.length() * tan(theta)
+        glassnerMidPoint = scene.eye + scene.gaze
     }
 
     /**
      * Calculates the color for an infividual ray.
      */
-    private func trace(ray: Ray3) -> Color {
+    private func trace(ray: Ray3, width: UInt, height: UInt) -> Color {
         var t: Double = 0.0
         var min_t: Double = 0.0
         var object: Object?
@@ -71,18 +91,32 @@ class Raytracer {
     /**
      * Traces the scene into an image.
      */
-    public func trace(image: Image) {
-        let width = image.width
-        let height = image.height
+    public func trace() -> Image {
+        let width = scene.width
+        let height = scene.height
+        let image = Image(width: width, height: height)
 
         for y in 0..<height {
             for x in 0..<width {
-                let pixel = Point3(x: Double(x), y: Double(height-1-y), z: 0)
+                let pixel = getGlassnerPixel(x: Double(x), y: Double(height-1-y))
                 let ray = Ray3(p1: scene.eye, p2: pixel)
-                var color = trace(ray: ray)
+                var color = trace(ray: ray, width: width, height: height)
                 color.clamp()
                 image[x, y] = color
             }
         }
+        return image
+    }
+
+
+    /**
+     * Getting Glassner Pixel
+     */
+
+    func getGlassnerPixel(x: Double, y: Double) -> Point3 {
+        let sx = x / Double(scene.width-1)
+        let sy = y / Double(scene.height-1)
+        let point = glassnerMidPoint + (2.0*sx - 1.0)*glassnerH + (2.0*sy - 1.0)*glassnerV
+        return point
     }
 }
