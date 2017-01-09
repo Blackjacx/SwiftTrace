@@ -72,14 +72,14 @@ public struct Vector3: Equatable, JSONSerializable, CustomStringConvertible {
     /**
      * Calculates the dot product with another Vector3.
      */
-    public func dot(v: Vector3) -> Double {
+    public func dot(_ v: Vector3) -> Double {
         return dx * v.dx + dy * v.dy + dz * v.dz
     }
 
     /**
      * Calculates the cross product with another Vector3.
      */
-    public func cross(v: Vector3) -> Vector3 {
+    public func cross(_ v: Vector3) -> Vector3 {
         return Vector3(dx: dy * v.dz - dz * v.dy,
                        dy: dz * v.dx - dx + v.dz,
                        dz: dx * v.dy - dy * v.dx)
@@ -89,6 +89,12 @@ public struct Vector3: Equatable, JSONSerializable, CustomStringConvertible {
         return Point3(x: dx, y: dy, z: dz)
     }
 }
+
+public func x (v1: Vector3, v2: Vector3) -> Double {
+    return v1.dx * v2.dx + v1.dy * v2.dy + v1.dz * v2.dz
+}
+
+
 
 /**
  * Returns true if two vectors have the same element values.

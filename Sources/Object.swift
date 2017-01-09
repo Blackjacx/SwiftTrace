@@ -9,6 +9,6 @@
 public protocol Object: JSONSerializable {
     var material: Material {get set}
 
-    func intersect(ray: Ray3, t: inout Double) -> Bool
+    func intersect(ray: Ray3, t: inout Double) -> Int
     func normal(P: Point3) -> Vector3
 }

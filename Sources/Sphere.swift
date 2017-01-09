@@ -46,14 +46,14 @@ public struct Sphere: Object {
      * Quadratic solution for sphere ray intersection.
      *
      */
-    public func intersect(ray: Ray3, t: inout Double) -> Bool {
+    public func intersect(ray: Ray3, t: inout Double) -> Int {
         let CO = ray.origin - C                 // vector from center to origin
-        let p = 2.0 * CO.dot(v: ray.direction)  // part I for quadratic equation
-        let q = CO.dot(v: CO) - rr              // part II for quadratic equation
+        let p = 2.0 * CO.dot(ray.direction)  // part I for quadratic equation
+        let q = CO.dot(CO) - rr              // part II for quadratic equation
         let D = (p*0.5) * (p*0.5) - q           // discriminant
 
         if D < 0.0 {
-            return false                        // 0 solutions
+            return 0                        // 0 solutions
         }
 
         // distance calculation
@@ -61,16 +61,16 @@ public struct Sphere: Object {
 
         if t1 > DBL_EPSILON {                   // surely outside sphere (smallest ISP lies in ray direction)
             t = t1
-            return true
+            return 1
         }
 
         let t2 = (-p*0.5) + sqrt(D)
 
         if t2 > DBL_EPSILON {                   // surely inside sphere (second ISP lies in ray direction AND first ISP lies against ray direction)
             t = t2
-            return true
+            return -1
         }  
-        return false
+        return 0
     }
     
     public func normal(P: Point3) -> Vector3 {

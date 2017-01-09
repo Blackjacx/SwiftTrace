@@ -24,8 +24,8 @@
   "lights": [
     {
       "center": {
-        "x": -200.0,
-        "y": 600.0,
+        "x": -1000.0,
+        "y": -1600.0,
         "z": 1500.0
       },
       "color": {
@@ -53,8 +53,8 @@
         },
         "ambient": 0.2,
         "diffuse": 0.8,
-        "specular": 0.5,
-        "phong": 32.0
+        "specular": 0.2,
+        "phong": 8.0
       }
     },
     {
@@ -73,8 +73,8 @@
         },
         "ambient": 0.2,
         "diffuse": 0.8,
-        "specular": 0.5,
-        "phong": 32.0
+        "specular": 0.2,
+        "phong": 16.0
       }
     },
     {
@@ -93,7 +93,7 @@
         },
         "ambient": 0.2,
         "diffuse": 0.8,
-        "specular": 0.5,
+        "specular": 0.2,
         "phong": 32.0
       }
     },
@@ -113,8 +113,8 @@
         },
         "ambient": 0.2,
         "diffuse": 0.8,
-        "specular": 0.5,
-        "phong": 32.0
+        "specular": 0.2,
+        "phong": 64.0
       }
     },
     {
@@ -133,8 +133,8 @@
         },
         "ambient": 0.2,
         "diffuse": 0.8,
-        "specular": 0.5,
-        "phong": 32.0
+        "specular": 0.2,
+        "phong": 128.0
       }
     }
   ]

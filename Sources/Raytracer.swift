@@ -39,42 +39,20 @@ class Raytracer {
 
         // Find hit object and distance
         for obj in scene.objects {
-            if obj.intersect(ray: ray, t: &t) && (object == nil || t < min_t) {
+            if obj.intersect(ray: ray, t: &t) != 0 && (object == nil || t < min_t) {
                 min_t = t
                 object = obj
             }
         }
 
         guard let hitObject = object else {
-            return Color(gray: 1)
+            return Color(gray: 0)
         }
-        let material = hitObject.material           // the hit objects material
-        let matColor = material.color               // material color
-        let ka = material.ambient                   // phong: ambient factor
-        let kd = material.diffuse                   // phong: diffuse factor
-        let ks = material.specular                  // phong: specular factor
-        let phong = material.phong                  // phong: shiny exponent
 
         let hit = ray.at(t: min_t)                  // the hit point
-        let N = hitObject.normal(P: hit)            // the normal
         let V = -ray.direction                      // the view vector
 
-        var color = matColor                        // initially use the material color
-
-        /*
-         * Phong Lighting Model
-         */
-
-        color *= ka                                                 // ambient component
-
-        for light in scene.lights {
-            let L = (light.center - hit).normalized()               // vector from the hit point to the light
-            let R = (2.0 * N * L * N) - L                           // reflection vector for phong model
-
-            color += light.color * matColor * kd * max(0.0, L.dot(v: N)) // phong: diffuse component
-            color += light.color * ks * pow(max(0.0, V.dot(v: R)), phong) // phong: specular component
-        }
-        return color
+        return phongColor(for: hitObject, hit: hit, V: V)
     }
 
     /**
@@ -98,13 +76,13 @@ class Raytracer {
     }
 
     /**
-     * Setup Glassner's Simple Viewing Geometry (https://graphics.stanford.edu/courses/cs348b-98/gg/viewgeom.html)
+     * Glassner's Simple Viewing Geometry (https://graphics.stanford.edu/courses/cs348b-98/gg/viewgeom.html)
      */
 
     private func setupSimpleViewingGeometry(forWidth width: UInt, height: UInt) {
         let aspect = Double(scene.width) / Double(scene.height)
-        let A = scene.gaze.cross(v: scene.up)
-        let B = A.cross(v: scene.gaze)
+        let A = scene.gaze.cross(scene.up)
+        let B = A.cross(scene.gaze)
         let phiRad = scene.phi * 0.5 * Constants.DEG_2_RAD
         let thetaRad = atan( tan(phiRad) / aspect)
         glassnerH = A.normalized() * scene.gaze.length() * tan(phiRad)
@@ -112,14 +90,36 @@ class Raytracer {
         glassnerMidPoint = scene.eye + scene.gaze
     }
 
-    /**
-     * Getting Glassner Pixel
-     */
-
     private func getGlassnerPixel(x: Double, y: Double) -> Point3 {
         let sx = x / Double(scene.width-1)
         let sy = y / Double(scene.height-1)
         let point = glassnerMidPoint + (2.0*sx - 1.0)*glassnerH + (2.0*sy - 1.0)*glassnerV
         return point
+    }
+
+    /**
+     * Returns a color using the Phong Reflection Model
+     */
+    private func phongColor(for hitObject: Object, hit: Point3, V: Vector3) -> Color {
+        let material = hitObject.material           // the hit objects material
+        let ka = material.ambient                   // ambient factor
+        let kd = material.diffuse                   // diffuse factor
+        let ks = material.specular                  // specular factor
+        let phong = material.phong                  // shiny exponent
+
+        let N = hitObject.normal(P: hit)            // the normal
+
+        var color = material.color * ka             // ambient component
+
+        for light in scene.lights {
+            let L = (light.center - hit).normalized()                   // hit -> light vector
+            let LN = L.dot(N)
+            let R = 2.0 * N * LN - L                                    // reflection vector
+            let VR = V.dot(R)
+
+            color += light.color * material.color * kd * max(0.0, LN)   // diffuse component
+            color += light.color * ks * pow(max(0.0, VR), phong)        // specular component
+        }
+        return color
     }
 }
