@@ -15,9 +15,9 @@ struct Constants {
 
 class Raytracer {
     private var scene: Scene
-    private var glassnerH: Vector3
-    private var glassnerV: Vector3
-    private var glassnerMidPoint: Point3
+    private var glassnerH: Vector3 = Vector3.zero
+    private var glassnerV: Vector3 = Vector3.zero
+    private var glassnerMidPoint: Point3 = Point3.zero
 
     public init(filePath: String) throws {
         guard let fileData = FileManager.default.contents(atPath: filePath) else {
@@ -26,17 +26,7 @@ class Raytracer {
         let json = try JSONSerialization.jsonObject(with: fileData, options: []) as! [String:AnyObject]
         scene = try Scene(json: json)
 
-        /*
-         * Setup Glassner's Simple Viewing Geometry (https://graphics.stanford.edu/courses/cs348b-98/gg/viewgeom.html)
-         */
-        let aspect = 1.0 * Double(scene.width) / Double(self.scene.height)
-        let A = scene.gaze.cross(v: scene.up)
-        let B = A.cross(v: scene.gaze)
-        let phi = scene.phi * 0.5 * Constants.GRAD_2_RAD
-        let theta = atan( tan(phi) / aspect)
-        glassnerH = A.normalized() * scene.gaze.length() * tan(phi)
-        glassnerV = B.normalized() * scene.gaze.length() * tan(theta)
-        glassnerMidPoint = scene.eye + scene.gaze
+        setupSimpleViewingGeometry(forWidth: scene.width, height: scene.height)
     }
 
     /**
@@ -108,12 +98,26 @@ class Raytracer {
         return image
     }
 
+    /**
+     * Setup Glassner's Simple Viewing Geometry (https://graphics.stanford.edu/courses/cs348b-98/gg/viewgeom.html)
+     */
+
+    private func setupSimpleViewingGeometry(forWidth width: UInt, height: UInt) {
+        let aspect = 1.0 * Double(scene.width) / Double(self.scene.height)
+        let A = scene.gaze.cross(v: scene.up)
+        let B = A.cross(v: scene.gaze)
+        let phi = scene.phi * 0.5 * Constants.GRAD_2_RAD
+        let theta = atan( tan(phi) / aspect)
+        glassnerH = A.normalized() * scene.gaze.length() * tan(phi)
+        glassnerV = B.normalized() * scene.gaze.length() * tan(theta)
+        glassnerMidPoint = scene.eye + scene.gaze
+    }
 
     /**
      * Getting Glassner Pixel
      */
 
-    func getGlassnerPixel(x: Double, y: Double) -> Point3 {
+    private func getGlassnerPixel(x: Double, y: Double) -> Point3 {
         let sx = x / Double(scene.width-1)
         let sy = y / Double(scene.height-1)
         let point = glassnerMidPoint + (2.0*sx - 1.0)*glassnerH + (2.0*sy - 1.0)*glassnerV
