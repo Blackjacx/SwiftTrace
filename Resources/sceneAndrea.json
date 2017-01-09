@@ -1,11 +1,26 @@
 {
+  "width": 800,
+  "height": 800,
+
   "camera": {
-    "center": {
-      "x": -200.0,
-      "y": 200.0,
+    "eye": {
+      "x": 0.0,
+      "y": 0.0,
       "z": 1000.0
-    }
+    },
+    "up": {
+      "dx": 0.0,
+      "dy": 1.0,
+      "dz": 0.0
+    },
+    "gaze": {
+      "dx": 0.0,
+      "dy": 0.0,
+      "dz": -1.0
+    },
+    "phi": 45.0
   },
+
   "lights": [
     {
       "center": {
@@ -24,67 +39,7 @@
     {
       "type": "sphere",
       "center": {
-        "x": 0.0,
-        "y": 400.0,
-        "z": 0.0
-      },
-      "radius": 50.0,
-      "material": {
-        "color": {
-          "r": 1.0,
-          "g": 0.0,
-          "b": 0.0
-        },
-        "ambient": 0.2,
-        "diffuse": 0.8,
-        "specular": 0.5,
-        "phong": 32.0
-      }
-    },
-    {
-      "type": "sphere",
-      "center": {
-        "x": 0.0,
-        "y": 200.0,
-        "z": 0.0
-      },
-      "radius": 50.0,
-      "material": {
-        "color": {
-          "r": 1.0,
-          "g": 0.0,
-          "b": 0.0
-        },
-        "ambient": 0.2,
-        "diffuse": 0.8,
-        "specular": 0.5,
-        "phong": 32.0
-      }
-    },
-    {
-      "type": "sphere",
-      "center": {
-        "x": 0.0,
-        "y": 0.0,
-        "z": 0.0
-      },
-      "radius": 50.0,
-      "material": {
-        "color": {
-          "r": 1.0,
-          "g": 0.0,
-          "b": 0.0
-        },
-        "ambient": 0.2,
-        "diffuse": 0.8,
-        "specular": 0.5,
-        "phong": 32.0
-      }
-    },
-    {
-      "type": "sphere",
-      "center": {
-        "x": 200.0,
+        "x": 300.0,
         "y": 300.0,
         "z": 0.0
       },
@@ -104,8 +59,8 @@
     {
       "type": "sphere",
       "center": {
-        "x": 200.0,
-        "y": 100.0,
+        "x": 0.0,
+        "y": 300.0,
         "z": 0.0
       },
       "radius": 50.0,
@@ -124,8 +79,8 @@
     {
       "type": "sphere",
       "center": {
-        "x": 400.0,
-        "y": 400.0,
+        "x": -300.0,
+        "y": 300.0,
         "z": 0.0
       },
       "radius": 50.0,
@@ -144,27 +99,7 @@
     {
       "type": "sphere",
       "center": {
-        "x": 400.0,
-        "y": 200.0,
-        "z": 0.0
-      },
-      "radius": 50.0,
-      "material": {
-        "color": {
-          "r": 1.0,
-          "g": 0.0,
-          "b": 0.0
-        },
-        "ambient": 0.2,
-        "diffuse": 0.8,
-        "specular": 0.5,
-        "phong": 32.0
-      }
-    },
-    {
-      "type": "sphere",
-      "center": {
-        "x": 400.0,
+        "x": 300.0,
         "y": 0.0,
         "z": 0.0
       },
@@ -180,6 +115,106 @@
         "specular": 0.5,
         "phong": 32.0
       }
-    }
+    },
+    {
+      "type": "sphere",
+      "center": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "radius": 50.0,
+      "material": {
+        "color": {
+          "r": 1.0,
+          "g": 0.0,
+          "b": 0.0
+        },
+        "ambient": 0.2,
+        "diffuse": 0.8,
+        "specular": 0.5,
+        "phong": 32.0
+      }
+    },
+    {
+      "type": "sphere",
+      "center": {
+        "x": -300.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "radius": 50.0,
+      "material": {
+        "color": {
+          "r": 1.0,
+          "g": 0.0,
+          "b": 0.0
+        },
+        "ambient": 0.2,
+        "diffuse": 0.8,
+        "specular": 0.5,
+        "phong": 32.0
+      }
+    },
+    {
+      "type": "sphere",
+      "center": {
+        "x": 300.0,
+        "y": -300.0,
+        "z": 0.0
+      },
+      "radius": 50.0,
+      "material": {
+        "color": {
+          "r": 1.0,
+          "g": 0.0,
+          "b": 0.0
+        },
+        "ambient": 0.2,
+        "diffuse": 0.8,
+        "specular": 0.5,
+        "phong": 32.0
+      }
+    },
+    {
+      "type": "sphere",
+      "center": {
+        "x": 0.0,
+        "y": -300.0,
+        "z": 0.0
+      },
+      "radius": 50.0,
+      "material": {
+        "color": {
+          "r": 1.0,
+          "g": 0.0,
+          "b": 0.0
+        },
+        "ambient": 0.2,
+        "diffuse": 0.8,
+        "specular": 0.5,
+        "phong": 32.0
+      }
+    },
+    {
+      "type": "sphere",
+      "center": {
+        "x": -300.0,
+        "y": -300.0,
+        "z": 0.0
+      },
+      "radius": 50.0,
+      "material": {
+        "color": {
+          "r": 1.0,
+          "g": 0.0,
+          "b": 0.0
+        },
+        "ambient": 0.2,
+        "diffuse": 0.8,
+        "specular": 0.5,
+        "phong": 32.0
+      }
+    },
   ]
 }

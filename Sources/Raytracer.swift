@@ -9,8 +9,8 @@
 import Foundation
 
 struct Constants {
-    static let RAD_2_GRAD: Double = 57.295779513082320876798154814105
-    static let GRAD_2_RAD: Double = 0.017453292519943295769236907684886
+    static let RAD_2_DEG: Double = 180.0 / Double.pi
+    static let DEG_2_RAD: Double = Double.pi / 180.0
 }
 
 class Raytracer {
@@ -46,35 +46,34 @@ class Raytracer {
         }
 
         guard let hitObject = object else {
-            return Color(gray: 0)
+            return Color(gray: 1)
         }
+        let material = hitObject.material           // the hit objects material
+        let matColor = material.color               // material color
+        let ka = material.ambient                   // phong: ambient factor
+        let kd = material.diffuse                   // phong: diffuse factor
+        let ks = material.specular                  // phong: specular factor
+        let phong = material.phong                  // phong: shiny exponent
 
-        let material = hitObject.material           //the hit objects material
-        let hit = ray.at(t: min_t)                  //the hit point
-        let N = hitObject.normal(P: hit)            //the normal
-        let V = -ray.direction                      //the view vector
+        let hit = ray.at(t: min_t)                  // the hit point
+        let N = hitObject.normal(P: hit)            // the normal
+        let V = -ray.direction                      // the view vector
 
+        var color = matColor                        // initially use the material color
 
-        /****************************************************
-         * RT1.3: LIGHTING CALCULATION
-         *
-         * Insert calculation of color here (PHONG model).
-         *
-         * Given: material, hit, N, V, lights[]
-         * Sought: color
-         *
-         * Hints: (see vector.h)
-         *        Vector*Vector      dot product
-         *        Vector+Vector      vector sum
-         *        Vector-Vector      vector difference
-         *        Point-Point        yields vector
-         *        Vector.normalize() normalizes vector, returns length
-         *        float*Color        scales each color component (r,g,b)
-         *        Color*Color        dito
-         *        pow(a,b)           a to the power of b
-         ****************************************************/
+        /*
+         * Phong Lighting Model
+         */
 
-        let color = material.color                  // place holder
+        color *= ka                                                 // ambient component
+
+        for light in scene.lights {
+            let L = (light.center - hit).normalized()               // vector from the hit point to the light
+            let R = (2.0 * N * L * N) - L                           // reflection vector for phong model
+
+            color += light.color * matColor * kd * max(0.0, L.dot(v: N)) // phong: diffuse component
+            color += light.color * ks * pow(max(0.0, V.dot(v: R)), phong) // phong: specular component
+        }
         return color
     }
 
@@ -103,13 +102,13 @@ class Raytracer {
      */
 
     private func setupSimpleViewingGeometry(forWidth width: UInt, height: UInt) {
-        let aspect = 1.0 * Double(scene.width) / Double(self.scene.height)
+        let aspect = Double(scene.width) / Double(scene.height)
         let A = scene.gaze.cross(v: scene.up)
         let B = A.cross(v: scene.gaze)
-        let phi = scene.phi * 0.5 * Constants.GRAD_2_RAD
-        let theta = atan( tan(phi) / aspect)
-        glassnerH = A.normalized() * scene.gaze.length() * tan(phi)
-        glassnerV = B.normalized() * scene.gaze.length() * tan(theta)
+        let phiRad = scene.phi * 0.5 * Constants.DEG_2_RAD
+        let thetaRad = atan( tan(phiRad) / aspect)
+        glassnerH = A.normalized() * scene.gaze.length() * tan(phiRad)
+        glassnerV = B.normalized() * scene.gaze.length() * tan(thetaRad)
         glassnerMidPoint = scene.eye + scene.gaze
     }
 
