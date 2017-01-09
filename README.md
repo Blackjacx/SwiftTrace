@@ -1,6 +1,6 @@
 # SwiftTrace
 
-A simple cross platform raytracer written in Swift. The supported platforms are macOS, iOS, tvOS, Linux. This project is based on the raytracer I wrote in the computer graphics course 2005 in C++ at the Otto-von-Guericke University in Magdeburg. The repository is build up based on the exercises of the course. Each branch represents an exercise. The first one is `01-StarterProject` for example.
+A simple cross platform raytracer written in Swift. The supported platforms are macOS, iOS, tvOS, Linux. This project is based on the raytracer I wrote in the computer graphics course 2005 in C++ at the Otto-von-Guericke University in Magdeburg.
 
 ## Requirements
 
@@ -23,15 +23,3 @@ As prerequisite you'll need the newest Swift toolchain. You can find it [here](h
 ### Linux (**OPEN**)
 
 In near future it will be possible to build the project using a makefile under Linux.
-
-## Lecture Exercises
-
-This part is intended when you like to use this repository as a learning resource how to write your own ray tracing programm. Just go through the lectures step by step. You can find the solution for each lecture in the corresponding branches of this repository. They are labelled with the same numbers.
-
-### 01 - Getting familiar with the project structure and Swift
-
-### 02 - Sphere intersection calculation and Phong illumination model
-
-### 03 -
-
-### 04 -
