@@ -18,6 +18,7 @@ public class Image: CustomStringConvertible {
     private(set) var height: UInt
     var size: UInt { return width * height }
     var backgroundColor: Color = Color(gray: 0)
+    private let syncAccessQueue = DispatchQueue(label: "com.swiftTrace.imageSerialSynchAccessQueue")
 
     // Custom String Convertible
     public var description: String {
@@ -43,11 +44,17 @@ public class Image: CustomStringConvertible {
     subscript(x: UInt, y: UInt) -> Color {
         get {
             assert(indexIsValidFor(x: x, y: y), "Index out of range")
-            return pixel[Int(index(x: x, y: y))]
+            var pixel: Color!
+            syncAccessQueue.sync {
+                pixel = self.pixel[Int(index(x: x, y: y))]
+            }
+            return pixel
         }
         set(newValue) {
             assert(indexIsValidFor(x: x, y: y), "Index out of range")
-            pixel[Int(index(x: x, y: y))] = newValue
+            syncAccessQueue.async {
+                self.pixel[Int(self.index(x: x, y: y))] = newValue
+            }
         }
     }
 
@@ -55,11 +62,17 @@ public class Image: CustomStringConvertible {
     subscript(x: Double, y: Double) -> Color {
         get {
             assert(indexIsValidFor(x: x, y: y), "Index out of range")
-            return pixel[Int(findex(x: x, y: y))]
+            var pixel: Color!
+            syncAccessQueue.sync {
+                pixel = self.pixel[Int(findex(x: x, y: y))]
+            }
+            return pixel
         }
         set(newValue) {
             assert(indexIsValidFor(x: x, y: y), "Index out of range")
-            pixel[Int(findex(x: x, y: y))] = newValue
+            syncAccessQueue.async {
+                self.pixel[Int(self.findex(x: x, y: y))] = newValue
+            }
         }
     }
 
