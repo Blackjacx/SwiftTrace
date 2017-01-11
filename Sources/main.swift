@@ -13,16 +13,21 @@ if CommandLine.argc != 2 {
 }
 
 let filePath = CommandLine.arguments[1]
+let startDate = Date()
+
+print("Starting trace")
 
 do {
     let destinationName = filePath.components(separatedBy: "/").last?.components(separatedBy: ".").first ?? "test"
     let raytracer = try Raytracer(filePath: filePath)
     let image = raytracer.trace()
     try image.write(to: destinationName + ".ppm")
+    print("Trace finished \(Float(Date().timeIntervalSince(startDate))) seconds")
+
 } catch JSONError.decodingError(let className, let json) {
     print("Failed initializing scene: \(className) - \(json)")
 } catch FileIOError.writeError(let filePath) {
     print("File not written at path: \(filePath)")
-} catch {
+}  catch {
     print("File not found at: \(filePath)")
 }
