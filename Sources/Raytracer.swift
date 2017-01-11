@@ -14,10 +14,10 @@ struct Constants {
 }
 
 class Raytracer {
-    private var scene: Scene
-    private var glassnerH: Vector3 = Vector3.zero
-    private var glassnerV: Vector3 = Vector3.zero
-    private var glassnerMidPoint: Point3 = Point3.zero
+    private(set) var scene: Scene
+    private(set) var glassnerH: Vector3 = Vector3.zero
+    private(set) var glassnerV: Vector3 = Vector3.zero
+    private(set) var glassnerMidPoint: Point3 = Point3.zero
 
     public init(filePath: String) throws {
         guard let fileData = FileManager.default.contents(atPath: filePath) else {
@@ -32,7 +32,7 @@ class Raytracer {
     /**
      * Calculates the color for an infividual ray.
      */
-    private func trace(ray: Ray3, width: UInt, height: UInt) -> Color {
+    private func trace(ray: Ray3) -> Color {
         var t: Double = 0.0
         var min_t: Double = 0.0
         var object: Object?
@@ -59,21 +59,58 @@ class Raytracer {
      * Traces the scene into an image.
      */
     public func trace() -> Image {
-        let width = scene.width
-        let height = scene.height
-        let image = Image(width: width, height: height)
+        let W = scene.width
+        let H = scene.height
+        let image = Image(width: W, height: H)
 
-        for y in 0..<height {
-            for x in 0..<width {
-                let pixel = getGlassnerPixel(x: Double(x), y: Double(height-1-y))
-                let ray = Ray3(p1: scene.eye, p2: pixel)
-                var color = trace(ray: ray, width: width, height: height)
-                color.clamp()
-                image[x, y] = color
+        /*
+         * Approach Concurrent
+         */
+
+        let queue = DispatchQueue(label: "com.dispatchQueue.concurrent", attributes: .concurrent)
+        let group = DispatchGroup()
+        let taskCount: UInt = 4 // Must be >= 4 and a power of 2 - best results achieved when == number of cores
+        let X: UInt = UInt(sqrt(Float(taskCount))) // tasks for one row or column
+        let HX = H / X
+        let WX = W / X
+
+        for i in 0..<X {
+            for j in 0..<X {
+                // Create a task per square of pixels
+                queue.async(group: group) {
+                    for y in (i*HX)..<((i+1)*HX) {
+                        for x in (j*WX)..<((j+1)*WX) {
+                            image[x, y] = self.computeColorAt(x: x, y: y, W: W, H: H)
+                        }
+                    }
+                }
             }
         }
+        group.wait()
+
+
+        /*
+         * Approach: Stupid
+         */
+
+//        for y in 0..<H {
+//            for x in 0..<W {
+//                image[x, y] = self.computeColorAt(x: x, y: y, W: W, H: H)
+//            }
+//        }
+
         return image
     }
+
+    func computeColorAt(x: UInt, y: UInt, W: UInt, H: UInt) -> Color {
+        let pixel = self.getGlassnerPixel(x: x, y: H-y-1)
+        let ray = Ray3(p1: self.scene.eye, p2: pixel)
+
+        var color = self.trace(ray: ray)
+        color.clamp()
+        return color
+    }
+
 
     /**
      * Glassner's Simple Viewing Geometry (https://graphics.stanford.edu/courses/cs348b-98/gg/viewgeom.html)
@@ -90,9 +127,9 @@ class Raytracer {
         glassnerMidPoint = scene.eye + scene.gaze
     }
 
-    private func getGlassnerPixel(x: Double, y: Double) -> Point3 {
-        let sx = x / Double(scene.width-1)
-        let sy = y / Double(scene.height-1)
+    private func getGlassnerPixel(x: UInt, y: UInt) -> Point3 {
+        let sx = Double(x) / Double(scene.width-1)
+        let sy = Double(y) / Double(scene.height-1)
         let point = glassnerMidPoint + (2.0*sx - 1.0)*glassnerH + (2.0*sy - 1.0)*glassnerV
         return point
     }
